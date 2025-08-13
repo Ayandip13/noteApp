@@ -5,6 +5,7 @@ import {
     FlatList,
     StyleSheet,
     TouchableOpacity,
+    Pressable,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
@@ -13,6 +14,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 const HomeScreen = ({ navigation }: any) => {
     const [notes, setNotes] = useState<string[]>([]);
     const rotation = useSharedValue(0);
+    const [isButtonPressed, setIsButtonPressed] = useState(false);
 
     const animations = useAnimatedStyle(() => {
         return {
@@ -42,8 +44,7 @@ const HomeScreen = ({ navigation }: any) => {
                 data={notes}
                 keyExtractor={(item, index) => item.toString()}
                 renderItem={({ item, index }) => (
-                    <TouchableOpacity
-                    // onPress={() => navigation.navigate('AddNote', { note: item })}
+                    <Pressable
                     >
                         <View style={styles.noteItem}>
                             <Text>{item}</Text>
@@ -55,10 +56,9 @@ const HomeScreen = ({ navigation }: any) => {
                                     size={20}
                                     onPress={() => navigation.navigate('AddNote', { note: item, index })}
                                 />
-
                             </View>
                         </View>
-                    </TouchableOpacity>
+                    </Pressable>
                 )}
             />
 
@@ -69,7 +69,7 @@ const HomeScreen = ({ navigation }: any) => {
                         handleButtonPressed();
                     }}
                 >
-                    <AntDesign name="plus" color="#000" size={30} />
+                    <AntDesign name="plus" color="#fff" size={30} />
                 </TouchableOpacity>
             </Animated.View>
         </View>
@@ -83,22 +83,24 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 35,
         paddingVertical: 20,
+        backgroundColor: '#FFF5F2',
     },
     noteItem: {
-        backgroundColor: '#fff',
+        backgroundColor: '#F5BABB',
         paddingHorizontal: 20,
         marginVertical: 8,
         borderRadius: 8,
         elevation: 5,
         paddingVertical: 30,
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginHorizontal: 10,
     },
     fab: {
         position: 'absolute',
         right: 20,
         bottom: 30,
-        backgroundColor: '#D25D5D',
+        backgroundColor: '#064232',
         borderRadius: 30,
         width: 60,
         height: 60,
