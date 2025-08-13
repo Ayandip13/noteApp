@@ -7,10 +7,24 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const HomeScreen = ({ navigation }: any) => {
     const [notes, setNotes] = useState<string[]>([]);
+    const rotation = useSharedValue(0);
+
+    const animations = useAnimatedStyle(() => {
+        return {
+            transform: [
+                { rotate: `${rotation.value}deg` }
+            ]
+        }
+    });
+
+    const handleButtonPressed = () => {
+        rotation.value = rotation.value === 0 ? withTiming(180, { duration: 500 }) : withSpring(0);
+    };
 
     const loadNotes = async () => {
         const saved = await AsyncStorage.getItem('notes');
@@ -26,25 +40,38 @@ const HomeScreen = ({ navigation }: any) => {
         <View style={styles.container}>
             <FlatList
                 data={notes}
-                keyExtractor={(_, index) => index.toString()}
-                renderItem={({ item }) => (
+                keyExtractor={(item, index) => item.toString()}
+                renderItem={({ item, index }) => (
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('NoteDetail', { note: item })}
+                    // onPress={() => navigation.navigate('AddNote', { note: item })}
                     >
                         <View style={styles.noteItem}>
-                            <Text>{item}</Text> {/* If item is a string */}
+                            <Text>{item}</Text>
+                            <View style={{ flexDirection: 'row', gap: 10 }}>
+                                <AntDesign name="delete" color="#000" size={20} />
+                                <AntDesign
+                                    name="edit"
+                                    color="#000"
+                                    size={20}
+                                    onPress={() => navigation.navigate('AddNote', { note: item, index })}
+                                />
+
+                            </View>
                         </View>
                     </TouchableOpacity>
                 )}
-
             />
 
-            <TouchableOpacity
-                style={styles.fab}
-                onPress={() => navigation.navigate('AddNote')}
-            >
-                <Icon name="add" size={30} color="white" />
-            </TouchableOpacity>
+            <Animated.View style={[styles.fab, animations]}>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('AddNote');
+                        handleButtonPressed();
+                    }}
+                >
+                    <AntDesign name="plus" color="#000" size={30} />
+                </TouchableOpacity>
+            </Animated.View>
         </View>
     );
 };
@@ -52,12 +79,20 @@ const HomeScreen = ({ navigation }: any) => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 16 },
+    container: {
+        flex: 1,
+        paddingHorizontal: 35,
+        paddingVertical: 20,
+    },
     noteItem: {
-        backgroundColor: '#f2f2f2',
-        padding: 15,
+        backgroundColor: '#fff',
+        paddingHorizontal: 20,
         marginVertical: 8,
         borderRadius: 8,
+        elevation: 5,
+        paddingVertical: 30,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     fab: {
         position: 'absolute',

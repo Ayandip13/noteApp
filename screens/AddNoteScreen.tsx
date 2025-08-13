@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View,
     TextInput,
@@ -12,16 +12,34 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import HomeScreen from './HomeScreen';
+import { useRoute } from '@react-navigation/native'
+
 
 const AddNoteScreen = ({ navigation }: any) => {
-    const [note, setNote] = useState('');
+    const [note, setNote] = useState<string>('');
+    // const [isParams, setIsParams] = useState<boolean | null>(null)
+    const route = useRoute()
+    const { note: item, index } = route.params || {}
+
+    useEffect(() => {
+        if (item) setNote(item);
+    }, [item]);
+
 
     const saveNote = async () => {
         if (!note.trim()) return;
 
         const stored = await AsyncStorage.getItem('notes');
         const notes = stored ? JSON.parse(stored) : [];
-        notes.push(note);
+
+        if (index !== undefined) {
+            // Updating the existing note
+            notes[index] = note;
+        } else {
+            //Updating the new note
+            notes.push(note);
+        }
+
         await AsyncStorage.setItem('notes', JSON.stringify(notes));
         navigation.goBack();
     };
@@ -46,7 +64,9 @@ const AddNoteScreen = ({ navigation }: any) => {
                     marginVertical: 10,
                     paddingVertical: 10,
                     borderRadius: 10
-                }}>
+                }}
+                onPress={() => saveNote()}
+            >
                 <Text style={{ textAlign: 'center', fontSize: 17, fontWeight: 'bold' }}>Save Note</Text>
             </TouchableOpacity>
         </KeyboardAvoidingView>
