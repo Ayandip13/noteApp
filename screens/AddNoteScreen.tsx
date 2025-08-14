@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
         color: 'red',
         fontSize: 16,
         marginBottom: 10,
-        marginLeft:5,
+        marginLeft: 5,
         fontWeight: 'bold'
     },
     saveButton: {

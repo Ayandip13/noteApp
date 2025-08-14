@@ -48,7 +48,13 @@ const HomeScreen = ({ navigation }: any) => {
                     >
                         <View style={styles.noteItem}>
                             <Text>{item}</Text>
-                            <View style={{ flexDirection: 'row', gap: 10 }}>
+                            <View
+                                style={{
+                                    flexDirection: 'column',
+                                    gap: 10,
+                                    alignItems: 'stretch',
+                                    justifyContent: 'space-between'
+                                }}>
                                 <AntDesign name="delete" color="#000" size={20} />
                                 <AntDesign
                                     name="edit"
@@ -61,12 +67,20 @@ const HomeScreen = ({ navigation }: any) => {
                     </Pressable>
                 )}
             />
+            {
+                isButtonPressed && (
+                    <View>
+                        <View style={{ flexDirection: 'row', gap: 10 }} />
+                    </View>
+                )
+            }
 
             <Animated.View style={[styles.fab, animations]}>
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate('AddNote');
+                        // navigation.navigate('AddNote');
                         handleButtonPressed();
+                        setIsButtonPressed(true);
                     }}
                 >
                     <AntDesign name="plus" color="#fff" size={30} />
