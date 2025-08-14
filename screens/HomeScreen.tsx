@@ -14,18 +14,33 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 const HomeScreen = ({ navigation }: any) => {
     const [notes, setNotes] = useState<string[]>([]);
     const rotation = useSharedValue(0);
-    const [isButtonPressed, setIsButtonPressed] = useState(false);
+    const scale = useSharedValue(1);
+    const opacity = useSharedValue(1);
+    const [isButtonPressed, setIsButtonPressed] = useState<boolean>(false);
 
-    const animations = useAnimatedStyle(() => {
-        return {
-            transform: [
-                { rotate: `${rotation.value}deg` }
-            ]
+    const noNotesAnim = useAnimatedStyle(() => ({
+        transform: [{ scale: scale.value }]
+    }));
+
+    const opacityAnim = useAnimatedStyle(() => ({
+        opacity: opacity.value
+    }));
+
+    const fabAnim = useAnimatedStyle(() => ({
+        transform: [{ rotate: `${rotation.value}deg` }]
+    }));
+
+    useEffect(() => {
+        if (notes.length === 0) {
+            scale.value = 0.8;
+            scale.value = withSpring(1, { damping: 5, stiffness: 120 });
         }
-    });
+    }, [notes]);
 
     const handleButtonPressed = () => {
-        rotation.value = rotation.value === 0 ? withTiming(180, { duration: 500 }) : withSpring(0);
+        rotation.value = rotation.value === 0
+            ? withTiming(180, { duration: 300 }) // rotate to 45 degrees
+            : withSpring(0);
     };
 
     const deleteNote = async (index: number) => {
@@ -62,11 +77,11 @@ const HomeScreen = ({ navigation }: any) => {
                             alignItems: 'center',
                             marginTop: 100
                         }}>
-                        <Text
-                            style={{
+                        <Animated.Text
+                            style={[{
                                 fontSize: 20,
                                 fontWeight: 'bold'
-                            }}>No Notes</Text>
+                            }, noNotesAnim]}>No Notes</Animated.Text>
                     </View>
                 )}
                 renderItem={({ item, index }) => (
@@ -102,14 +117,14 @@ const HomeScreen = ({ navigation }: any) => {
                         alignItems: 'center',
                     }}
                 >
-                    <View
-                        style={{
+                    <Animated.View
+                        style={[{
                             backgroundColor: '#F5BABB',
                             width: 90,
                             borderRadius: 8,
                             elevation: 5,
                             alignItems: 'center',
-                        }}
+                        }, opacityAnim]}
                     >
                         <TouchableOpacity
                             onPress={() => navigation.navigate('Add Note')}
@@ -139,15 +154,14 @@ const HomeScreen = ({ navigation }: any) => {
                                 }}
                             >See the {"\n"} Notes</Text>
                         </TouchableOpacity>
-                    </View>
+                    </Animated.View>
                 </View>
             )}
 
 
-            <Animated.View style={[styles.fab, animations]}>
+            <Animated.View style={[styles.fab, fabAnim]}>
                 <TouchableOpacity
                     onPress={() => {
-                        // navigation.navigate('AddNote');
                         handleButtonPressed();
                         setIsButtonPressed((prev) => !prev);
                     }}
