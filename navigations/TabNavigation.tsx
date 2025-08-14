@@ -35,9 +35,9 @@ export default function TabNavigator() {
                     tabBarInactiveTintColor: 'gray',
                 })}
         >
-            <Tab.Screen name="Notes" component={HomeScreen} />
+            <Tab.Screen name="Notes" options={{ headerShown: false }} component={HomeScreen} />
             <Tab.Screen name="Add Note" component={AddNoteScreen} />
-            <Tab.Screen name="Profile" component={ProfileScreen} />
+            <Tab.Screen name="Profile" component={ProfileScreen} options={{headerTitle: 'Profile'}} />
         </Tab.Navigator>
     );
 }

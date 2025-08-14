@@ -12,13 +12,15 @@ export default function DrawerNavigator() {
     <Drawer.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#064232'
+          backgroundColor: '#064232',
         },
         headerTintColor: '#FFF5F2',
-      }}>
-      <Drawer.Screen name="Main Tabs" component={TabNavigator} />
-      <Drawer.Screen name="Add Note" component={AddNoteScreen} />
+      }}
+    >
+      {/* Tabs will be the main thing inside Drawer */}
+      <Drawer.Screen name="Notes" options={{ headerTitleAlign: 'center' }} component={TabNavigator} />
       <Drawer.Screen name="Profile" component={ProfileScreen} />
+      <Drawer.Screen name="Add Note" component={AddNoteScreen} />
     </Drawer.Navigator>
   );
 }
