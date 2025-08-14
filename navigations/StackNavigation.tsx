@@ -1,12 +1,15 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import HomeScreen from "../screens/HomeScreen";
+import AddNoteScreen from "../screens/AddNoteScreen";
 
-const StackNavigation = () => {
+const Stack = createNativeStackNavigator();
+
+export default function AuthStack() {
   return (
-    <View>
-      <Text>StackNavigation</Text>
-    </View>
-  )
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="SignIn" component={HomeScreen} />
+      <Stack.Screen name="SignUp" component={AddNoteScreen} />
+    </Stack.Navigator>
+  );
 }
-
-export default StackNavigation

@@ -28,6 +28,17 @@ const HomeScreen = ({ navigation }: any) => {
         rotation.value = rotation.value === 0 ? withTiming(180, { duration: 500 }) : withSpring(0);
     };
 
+    const deleteNote = async (index: number) => {
+        try {
+            const updatedNotes = [...notes];
+            updatedNotes.splice(index, 1);
+            setNotes(updatedNotes);
+            await AsyncStorage.setItem('notes', JSON.stringify(updatedNotes)); // Save updated list
+        } catch (error) {
+            console.error('Error deleting note:', error);
+        }
+    };
+
     const loadNotes = async () => {
         const saved = await AsyncStorage.getItem('notes');
         if (saved) setNotes(JSON.parse(saved));
@@ -43,9 +54,9 @@ const HomeScreen = ({ navigation }: any) => {
             <FlatList
                 data={notes}
                 keyExtractor={(item, index) => item.toString()}
+                showsVerticalScrollIndicator={false}
                 renderItem={({ item, index }) => (
-                    <Pressable
-                    >
+                    <Pressable>
                         <View style={styles.noteItem}>
                             <Text>{item}</Text>
                             <View
@@ -55,7 +66,7 @@ const HomeScreen = ({ navigation }: any) => {
                                     alignItems: 'stretch',
                                     justifyContent: 'space-between'
                                 }}>
-                                <AntDesign name="delete" color="#000" size={20} />
+                                <AntDesign name="delete" color="#000" size={20} onPress={() => deleteNote(index)} />
                                 <AntDesign
                                     name="edit"
                                     color="#000"
@@ -95,7 +106,7 @@ export default HomeScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: 35,
+        paddingHorizontal: 25,
         paddingVertical: 20,
         backgroundColor: '#FFF5F2',
     },
@@ -109,6 +120,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginHorizontal: 10,
+        alignItems: 'center'
     },
     fab: {
         position: 'absolute',
