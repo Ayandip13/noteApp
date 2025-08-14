@@ -33,7 +33,7 @@ const HomeScreen = ({ navigation }: any) => {
     useEffect(() => {
         if (notes.length === 0) {
             scale.value = 0.8;
-            scale.value = withSpring(1, { damping: 5, stiffness: 120 });
+            scale.value = withSpring(1, { damping: 5, stiffness: 20 });
         }
     }, [notes]);
 

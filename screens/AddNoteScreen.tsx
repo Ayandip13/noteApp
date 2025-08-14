@@ -44,7 +44,9 @@ const AddNoteScreen = ({ navigation }: any) => {
             <Formik
                 initialValues={{ text: existingNote || '' }}
                 validationSchema={noteSchema}
-                onSubmit={(values) => saveNote(values.text)}
+                onSubmit={(values) => 
+                    saveNote(values.text)
+                }
             >
                 {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
                     <View style={{ flex: 1 }}>
