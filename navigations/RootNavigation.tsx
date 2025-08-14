@@ -1,28 +1,15 @@
-// RootNavigation.tsx
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import AuthStack from "../navigations/StackNavigation";
-import DrawerNavigator from "../navigations/DrawerNavigation";
-import TabNavigator from "./TabNavigation";
+import DrawerNavigation from "./DrawerNavigation";
+import StackNavigation from "./StackNavigation";
 
 const Stack = createNativeStackNavigator();
 
-// export default function RootNavigator() {
-//   return (
-//     <Stack.Navigator screenOptions={{ headerShown: false }}>
-//       {/* Choose which one you want to use */}
-//       {/* <Stack.Screen name="Drawer" component={DrawerNavigator} /> */}
-//       <Stack.Screen name="Tabs" component={TabNavigator} />  
-//       <Stack.Screen name="Auth" component={AuthStack} />
-//     </Stack.Navigator>
-//   );
-// }
-
-export default function RootNavigator() {
+export default function RootNavigation() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Drawer" component={DrawerNavigator} />  
-      <Stack.Screen name="Auth" component={AuthStack} />
+      <Stack.Screen name="MainApp" component={DrawerNavigation} />
+      <Stack.Screen name="Auth" component={StackNavigation} />
     </Stack.Navigator>
   );
 }

@@ -1,24 +1,22 @@
-import * as React from 'react';
+import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import TabNavigator from './TabNavigation'; // nested tabs
+import TabNavigation from './TabNavigation';
 import ProfileScreen from '../screens/ProfileScreen';
 import AddNoteScreen from '../screens/AddNoteScreen';
-import HomeScreen from '../screens/HomeScreen';
 
 const Drawer = createDrawerNavigator();
 
-export default function DrawerNavigator() {
+export default function DrawerNavigation() {
   return (
     <Drawer.Navigator
+      initialRouteName="Home"
       screenOptions={{
-        headerStyle: {
-          backgroundColor: '#064232',
-        },
-        headerTintColor: '#FFF5F2',
+        headerStyle: { backgroundColor: "#064232" },
+        headerTintColor: "#FFF5F2",
+        headerTitleAlign: "center",
       }}
     >
-      {/* Tabs will be the main thing inside Drawer */}
-      <Drawer.Screen name="Notes" options={{ headerTitleAlign: 'center' }} component={TabNavigator} />
+      <Drawer.Screen name="Home" component={TabNavigation} />
       <Drawer.Screen name="Profile" component={ProfileScreen} />
       <Drawer.Screen name="Add Note" component={AddNoteScreen} />
     </Drawer.Navigator>
