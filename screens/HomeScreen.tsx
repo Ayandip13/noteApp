@@ -55,10 +55,25 @@ const HomeScreen = ({ navigation }: any) => {
                 data={notes}
                 keyExtractor={(item, index) => item.toString()}
                 showsVerticalScrollIndicator={false}
+                ListEmptyComponent={() => (
+                    <View
+                        style={{
+                            flex: 1,
+                            alignItems: 'center',
+                            marginTop: 100
+                        }}>
+                        <Text
+                            style={{
+                                fontSize: 20,
+                                fontWeight: 'bold'
+                            }}>No Notes</Text>
+                    </View>
+                )}
                 renderItem={({ item, index }) => (
                     <Pressable>
                         <View style={styles.noteItem}>
-                            <Text>{item}</Text>
+                            {/* <Text>Notes That are created</Text> */}
+                            <Text numberOfLines={1} style={{ fontSize: 15 }}>{item}</Text>
                             <View
                                 style={{
                                     flexDirection: 'column',
@@ -71,27 +86,70 @@ const HomeScreen = ({ navigation }: any) => {
                                     name="edit"
                                     color="#000"
                                     size={20}
-                                    onPress={() => navigation.navigate('Note', { note: item, index })}
+                                    onPress={() => navigation.navigate('Add Note', { note: item, index })}
                                 />
                             </View>
                         </View>
                     </Pressable>
                 )}
             />
-            {
-                isButtonPressed && (
-                    <View>
-                        <View style={{ flexDirection: 'row', gap: 10 }} />
+            {isButtonPressed && (
+                <View
+                    style={{
+                        position: 'absolute',
+                        bottom: 100, // distance above the FAB
+                        right: 20,   // align with FAB's right position
+                        alignItems: 'center',
+                    }}
+                >
+                    <View
+                        style={{
+                            backgroundColor: '#F5BABB',
+                            width: 90,
+                            borderRadius: 8,
+                            elevation: 5,
+                            alignItems: 'center',
+                        }}
+                    >
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('Add Note')}
+                            style={{
+                                marginTop: 20,
+                            }}>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center' }}>Add {"\n"} Notes</Text>
+                        </TouchableOpacity>
+                        <View
+                            style={{
+                                backgroundColor: '#000',
+                                width: 60,
+                                height: 2,
+                                marginVertical: 10
+                            }}
+                        />
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('Profile')}
+                            style={{
+                                marginBottom: 20,
+                            }}>
+                            <Text
+                                style={{
+                                    fontSize: 16,
+                                    fontWeight: 'bold',
+                                    textAlign: 'center'
+                                }}
+                            >See the {"\n"} Notes</Text>
+                        </TouchableOpacity>
                     </View>
-                )
-            }
+                </View>
+            )}
+
 
             <Animated.View style={[styles.fab, animations]}>
                 <TouchableOpacity
                     onPress={() => {
                         // navigation.navigate('AddNote');
                         handleButtonPressed();
-                        setIsButtonPressed(true);
+                        setIsButtonPressed((prev) => !prev);
                     }}
                 >
                     <AntDesign name="plus" color="#fff" size={30} />
