@@ -1,4 +1,3 @@
-// TabNavigation.tsx
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
@@ -36,7 +35,7 @@ export default function TabNavigator() {
                     tabBarInactiveTintColor: 'gray',
                 })}
         >
-            <Tab.Screen name="Notes" component={DrawerNavigator} />
+            <Tab.Screen name="Notes" component={HomeScreen} />
             <Tab.Screen name="Add Note" component={AddNoteScreen} />
             <Tab.Screen name="Profile" component={ProfileScreen} />
         </Tab.Navigator>

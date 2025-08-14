@@ -16,11 +16,7 @@ export default function DrawerNavigator() {
         },
         headerTintColor: '#FFF5F2',
       }}>
-      <Drawer.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{ headerShown: false }} // Tab headers handle it
-      />
+      <Drawer.Screen name="Main Tabs" component={TabNavigator} />
       <Drawer.Screen name="Add Note" component={AddNoteScreen} />
       <Drawer.Screen name="Profile" component={ProfileScreen} />
     </Drawer.Navigator>
