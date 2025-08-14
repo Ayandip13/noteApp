@@ -1,12 +1,21 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import * as React from 'react';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import HomeScreen from '../screens/HomeScreen';
+import AddNoteScreen from '../screens/AddNoteScreen';
 
-const DrawerNavigation = () => {
+const Drawer = createDrawerNavigator();
+
+export default function DrawerNavigator() {
   return (
-    <View>
-      <Text>DrawerNavigation</Text>
-    </View>
-  )
+    <Drawer.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#064232'
+        },
+        headerTintColor: '#FFF5F2'
+      }}>
+      <Drawer.Screen options={{ headerTitleAlign: 'center' }} name="Home" component={HomeScreen} />
+      <Drawer.Screen name="Note" component={AddNoteScreen} />
+    </Drawer.Navigator>
+  );
 }
-
-export default DrawerNavigation

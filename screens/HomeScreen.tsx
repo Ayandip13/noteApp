@@ -71,7 +71,7 @@ const HomeScreen = ({ navigation }: any) => {
                                     name="edit"
                                     color="#000"
                                     size={20}
-                                    onPress={() => navigation.navigate('AddNote', { note: item, index })}
+                                    onPress={() => navigation.navigate('Note', { note: item, index })}
                                 />
                             </View>
                         </View>

@@ -1,12 +1,17 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useEffect } from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AuthStack from "../navigations/StackNavigation";
+import TabNavigator from "../navigations/DrawerNavigation";
+import DrawerNavigator from "../navigations/DrawerNavigation";
 
-const RootNavigation = () => {
+const Stack = createNativeStackNavigator();
+
+export default function RootNavigator() {
+
   return (
-    <View>
-      <Text>RootNavigation</Text>
-    </View>
-  )
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Drawer" component={DrawerNavigator} />
+      <Stack.Screen name="Auth" component={AuthStack} />
+    </Stack.Navigator>
+  );
 }
-
-export default RootNavigation
