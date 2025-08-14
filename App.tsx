@@ -10,7 +10,7 @@ export default function App() {
       <NavigationContainer>
         <RootNavigator />
       </NavigationContainer>
-      <StatusBar barStyle={"dark-content"} />
+      <StatusBar barStyle={"light-content"} />
     </SafeAreaProvider>
   );
 }

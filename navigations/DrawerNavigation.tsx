@@ -15,7 +15,7 @@ export default function DrawerNavigator() {
         headerTintColor: '#FFF5F2'
       }}>
       <Drawer.Screen options={{ headerTitleAlign: 'center' }} name="Home" component={HomeScreen} />
-      <Drawer.Screen name="Note" component={AddNoteScreen} />
+      <Drawer.Screen options={{ headerTitleAlign: 'center' }} name="Note" component={AddNoteScreen} />
     </Drawer.Navigator>
   );
 }
