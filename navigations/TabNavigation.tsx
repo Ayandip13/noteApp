@@ -5,6 +5,8 @@ import AddNoteScreen from '../screens/AddNoteScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DrawerNavigator from './DrawerNavigation';
+import DrawerNavigator2 from './DrawerNavigation2';
+import DrawerNavigator3 from './DrawerNavigation3';
 
 const Tab = createBottomTabNavigator();
 
@@ -13,7 +15,7 @@ export default function TabNavigator() {
     <Tab.Navigator
       // initialRouteName="Drawer"
       screenOptions={({ route }) => ({
-        headerShown: true,
+        headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName = 'home';
           if (route.name === 'Home') iconName = focused ? 'book' : 'book-outline';
@@ -32,9 +34,9 @@ export default function TabNavigator() {
         }
       })}
     >
-      <Tab.Screen name="Drawer" component={DrawerNavigator} options={{ headerShown: false }} />
-      <Tab.Screen name="AddNote" component={AddNoteScreen} options={{ title: 'Add Note' }} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Home" component={DrawerNavigator} options={{ headerShown: false }} />
+      <Tab.Screen name="AddNote" component={DrawerNavigator2} options={{ title: 'Add Note' }} />
+      <Tab.Screen name="Profile" component={DrawerNavigator3} />
     </Tab.Navigator>
   );
 }
