@@ -6,19 +6,19 @@ import AddNoteScreen from '../screens/AddNoteScreen';
 
 const Drawer = createDrawerNavigator();
 
-export default function DrawerNavigation() {
+export default function DrawerNavigator() {
   return (
     <Drawer.Navigator
-      initialRouteName="Home"
+      initialRouteName="Tabs"
       screenOptions={{
-        headerStyle: { backgroundColor: "#064232" },
-        headerTintColor: "#FFF5F2",
-        headerTitleAlign: "center",
+        headerStyle: { backgroundColor: '#064232' },
+        headerTintColor: '#FFF5F2',
+        headerTitleAlign: 'center',
       }}
     >
-      <Drawer.Screen name="Home" component={TabNavigation} />
+      <Drawer.Screen name="Tabs" component={TabNavigation} options={{ title: 'Home' }} />
+      <Drawer.Screen name="Add Notes" component={AddNoteScreen} />
       <Drawer.Screen name="Profile" component={ProfileScreen} />
-      <Drawer.Screen name="Add Note" component={AddNoteScreen} />
     </Drawer.Navigator>
   );
 }

@@ -127,7 +127,7 @@ const HomeScreen = ({ navigation }: any) => {
                         }, opacityAnim]}
                     >
                         <TouchableOpacity
-                            onPress={() => navigation.navigate('Add Note')}
+                            onPress={() => navigation.navigate('Add Notes')}
                             style={{
                                 marginTop: 20,
                             }}>
