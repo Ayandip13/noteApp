@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View,
     TextInput,
@@ -20,6 +20,7 @@ const noteSchema = Yup.object().shape({
 });
 
 const AddNoteScreen = ({ navigation }: any) => {
+    const [text, setText] = useState('');
     const route = useRoute();
     const { note: existingNote, index } = route.params || {};
 
@@ -44,9 +45,10 @@ const AddNoteScreen = ({ navigation }: any) => {
             <Formik
                 initialValues={{ text: existingNote || '' }}
                 validationSchema={noteSchema}
-                onSubmit={(values) => 
+                onSubmit={(values, { resetForm }) => {
                     saveNote(values.text)
-                }
+                    resetForm()
+                }}
             >
                 {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
                     <View style={{ flex: 1 }}>

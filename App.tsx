@@ -3,7 +3,6 @@ import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import RootNavigator from './navigations/RootNavigation';
 import TabNavigator from './navigations/TabNavigation';
 
 export default function App() {
