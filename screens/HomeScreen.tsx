@@ -8,8 +8,16 @@ import {
     Pressable,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, {
+    useAnimatedStyle,
+    useSharedValue,
+    withSpring,
+    withTiming,
+} from 'react-native-reanimated';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '../src/store/store';
+import { toggleTheme } from '../src/store/themeSlice';
 
 const HomeScreen = ({ navigation }: any) => {
     const [notes, setNotes] = useState<string[]>([]);
@@ -18,16 +26,21 @@ const HomeScreen = ({ navigation }: any) => {
     const opacity = useSharedValue(1);
     const [isButtonPressed, setIsButtonPressed] = useState<boolean>(false);
 
+    // Redux theme
+    const theme = useSelector((state: RootState) => state.theme.theme);
+    const dispatch = useDispatch<AppDispatch>();
+
+    // Animated styles
     const noNotesAnim = useAnimatedStyle(() => ({
-        transform: [{ scale: scale.value }]
+        transform: [{ scale: scale.value }],
     }));
 
     const opacityAnim = useAnimatedStyle(() => ({
-        opacity: opacity.value
+        opacity: opacity.value,
     }));
 
     const fabAnim = useAnimatedStyle(() => ({
-        transform: [{ rotate: `${rotation.value}deg` }]
+        transform: [{ rotate: `${rotation.value}deg` }],
     }));
 
     useEffect(() => {
@@ -38,9 +51,10 @@ const HomeScreen = ({ navigation }: any) => {
     }, [notes]);
 
     const handleButtonPressed = () => {
-        rotation.value = rotation.value === 0
-            ? withTiming(180, { duration: 300 }) // rotate to 45 degrees
-            : withSpring(0);
+        rotation.value =
+            rotation.value === 0
+                ? withTiming(180, { duration: 300 })
+                : withSpring(0);
     };
 
     const deleteNote = async (index: number) => {
@@ -48,7 +62,7 @@ const HomeScreen = ({ navigation }: any) => {
             const updatedNotes = [...notes];
             updatedNotes.splice(index, 1);
             setNotes(updatedNotes);
-            await AsyncStorage.setItem('notes', JSON.stringify(updatedNotes)); // Save updated list
+            await AsyncStorage.setItem('notes', JSON.stringify(updatedNotes));
         } catch (error) {
             console.error('Error deleting note:', error);
         }
@@ -65,99 +79,148 @@ const HomeScreen = ({ navigation }: any) => {
     }, [navigation]);
 
     return (
-        <View style={styles.container}>
+        <View
+            style={[
+                styles.container,
+                {
+                    backgroundColor: theme === 'dark' ? '#333' : '#FFF5F2',
+                },
+            ]}
+        >
             <FlatList
                 data={notes}
-                keyExtractor={(item, index) => item.toString()}
+                keyExtractor={(item, index) => index.toString()}
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={() => (
-                    <View
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            marginTop: 100
-                        }}>
+                    <View style={{ flex: 1, alignItems: 'center', marginTop: 100 }}>
                         <Animated.Text
-                            style={[{
-                                fontSize: 20,
-                                fontWeight: 'bold'
-                            }, noNotesAnim]}>No Notes</Animated.Text>
+                            style={[
+                                {
+                                    fontSize: 20,
+                                    fontWeight: 'bold',
+                                    color: theme === 'dark' ? '#FFF' : '#000',
+                                },
+                                noNotesAnim,
+                            ]}
+                        >
+                            No Notes
+                        </Animated.Text>
                     </View>
                 )}
                 renderItem={({ item, index }) => (
                     <Pressable>
-                        <View style={styles.noteItem}>
-                            {/* <Text>Notes That are created</Text> */}
-                            <Text numberOfLines={1} style={{ fontSize: 15 }}>{item}</Text>
+                        <View
+                            style={[
+                                styles.noteItem,
+                                {
+                                    backgroundColor:
+                                        theme === 'dark' ? '#333' : '#F5BABB',
+                                },
+                            ]}
+                        >
+                            <Text
+                                numberOfLines={1}
+                                style={{
+                                    fontSize: 15,
+                                    color: theme === 'dark' ? '#FFF' : '#000',
+                                }}
+                            >
+                                {item}
+                            </Text>
                             <View
                                 style={{
                                     flexDirection: 'column',
                                     gap: 10,
                                     alignItems: 'stretch',
-                                    justifyContent: 'space-between'
-                                }}>
-                                <AntDesign name="delete" color="#000" size={20} onPress={() => deleteNote(index)} />
+                                    justifyContent: 'space-between',
+                                }}
+                            >
+                                <AntDesign
+                                    name="delete"
+                                    color={theme === 'dark' ? '#FFF' : '#000'}
+                                    size={20}
+                                    onPress={() => deleteNote(index)}
+                                />
                                 <AntDesign
                                     name="edit"
-                                    color="#000"
+                                    color={theme === 'dark' ? '#FFF' : '#000'}
                                     size={20}
-                                    onPress={() => navigation.navigate('Add Note', { note: item, index })}
+                                    onPress={() =>
+                                        navigation.navigate('Add Note', {
+                                            note: item,
+                                            index,
+                                        })
+                                    }
                                 />
                             </View>
                         </View>
                     </Pressable>
                 )}
             />
+
             {isButtonPressed && (
                 <View
                     style={{
                         position: 'absolute',
-                        bottom: 100, // distance above the FAB
-                        right: 20,   // align with FAB's right position
+                        bottom: 100,
+                        right: 20,
                         alignItems: 'center',
                     }}
                 >
                     <Animated.View
-                        style={[{
-                            backgroundColor: '#F5BABB',
-                            width: 90,
-                            borderRadius: 8,
-                            elevation: 5,
-                            alignItems: 'center',
-                        }, opacityAnim]}
+                        style={[
+                            {
+                                backgroundColor:
+                                    theme === 'dark' ? '#444' : '#F5BABB',
+                                width: 90,
+                                borderRadius: 8,
+                                elevation: 5,
+                                alignItems: 'center',
+                            },
+                            opacityAnim,
+                        ]}
                     >
                         <TouchableOpacity
                             onPress={() => navigation.navigate('Add Notes')}
-                            style={{
-                                marginTop: 20,
-                            }}>
-                            <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center' }}>Add {"\n"} Notes</Text>
-                        </TouchableOpacity>
-                        <View
-                            style={{
-                                backgroundColor: '#000',
-                                width: 60,
-                                height: 2,
-                                marginVertical: 10
-                            }}
-                        />
-                        <TouchableOpacity
-                            onPress={() => navigation.navigate('Profile')}
-                            style={{
-                                marginBottom: 20,
-                            }}>
+                            style={{ marginTop: 20 }}
+                        >
                             <Text
                                 style={{
                                     fontSize: 16,
                                     fontWeight: 'bold',
-                                    textAlign: 'center'
+                                    textAlign: 'center',
+                                    color: theme === 'dark' ? '#FFF' : '#000',
                                 }}
-                            >See the {"\n"} Notes</Text>
+                            >
+                                Add {'\n'} Notes
+                            </Text>
+                        </TouchableOpacity>
+                        <View
+                            style={{
+                                backgroundColor: theme === 'dark' ? '#FFF' : '#000',
+                                width: 60,
+                                height: 2,
+                                marginVertical: 10,
+                            }}
+                        />
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('Profile')}
+                            style={{ marginBottom: 20 }}
+                        >
+                            <Text
+                                style={{
+                                    fontSize: 16,
+                                    fontWeight: 'bold',
+                                    textAlign: 'center',
+                                    color: theme === 'dark' ? '#FFF' : '#000',
+                                }}
+                            >
+                                See the {'\n'} Notes
+                            </Text>
                         </TouchableOpacity>
                     </Animated.View>
                 </View>
             )}
-
 
             <Animated.View style={[styles.fab, fabAnim]}>
                 <TouchableOpacity
@@ -165,6 +228,7 @@ const HomeScreen = ({ navigation }: any) => {
                         handleButtonPressed();
                         setIsButtonPressed((prev) => !prev);
                     }}
+                    onLongPress={() => dispatch(toggleTheme())} // 🌙 toggle theme on long press
                 >
                     <AntDesign name="plus" color="#fff" size={30} />
                 </TouchableOpacity>
@@ -180,10 +244,8 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 25,
         paddingVertical: 20,
-        backgroundColor: '#FFF5F2',
     },
     noteItem: {
-        backgroundColor: '#F5BABB',
         paddingHorizontal: 20,
         marginVertical: 8,
         borderRadius: 8,
@@ -192,13 +254,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginHorizontal: 10,
-        alignItems: 'center'
+        alignItems: 'center',
     },
     fab: {
         position: 'absolute',
+        // marginTop:10,
         right: 20,
         bottom: 30,
         backgroundColor: '#064232',
+        // backgroundColor: 'red',
         borderRadius: 30,
         width: 60,
         height: 60,

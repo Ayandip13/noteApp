@@ -1,9 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from '../screens/HomeScreen';
-import AddNoteScreen from '../screens/AddNoteScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import { useSelector } from 'react-redux';
+import { RootState } from '../src/store/store';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import DrawerNavigator from './DrawerNavigation';
 import DrawerNavigator2 from './DrawerNavigation2';
 import DrawerNavigator3 from './DrawerNavigation3';
@@ -11,9 +11,11 @@ import DrawerNavigator3 from './DrawerNavigation3';
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
+  // Get theme from Redux
+  const theme = useSelector((state: RootState) => state.theme.theme);
+
   return (
     <Tab.Navigator
-      // initialRouteName="Drawer"
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
@@ -23,15 +25,18 @@ export default function TabNavigator() {
           else if (route.name === 'Profile') iconName = focused ? 'person' : 'person-outline';
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#064232',
-        tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: theme === 'dark' ? '#fff' : '#064232',
+        tabBarInactiveTintColor: theme === 'dark' ? '#888' : 'gray',
         headerStyle: {
-          backgroundColor: '#064232',
+          backgroundColor: theme === 'dark' ? '#000' : '#064232',
         },
         headerTitleAlign: 'center',
-        headerTitleStyle:{
-          color: '#FFF5F2'
-        }
+        headerTitleStyle: {
+          color: theme === 'dark' ? '#FFF' : '#FFF5F2',
+        },
+        tabBarStyle: {
+          backgroundColor: theme === 'dark' ? '#111' : '#FFF',
+        },
       })}
     >
       <Tab.Screen name="Home" component={DrawerNavigator} options={{ headerShown: false }} />
