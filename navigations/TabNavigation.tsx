@@ -4,15 +4,16 @@ import HomeScreen from '../screens/HomeScreen';
 import AddNoteScreen from '../screens/AddNoteScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import DrawerNavigator from './DrawerNavigation';
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      // initialRouteName="Drawer"
       screenOptions={({ route }) => ({
-        headerShown: false,
+        headerShown: true,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName = 'home';
           if (route.name === 'Home') iconName = focused ? 'book' : 'book-outline';
@@ -22,9 +23,16 @@ export default function TabNavigator() {
         },
         tabBarActiveTintColor: '#064232',
         tabBarInactiveTintColor: 'gray',
+        headerStyle: {
+          backgroundColor: '#064232',
+        },
+        headerTitleAlign: 'center',
+        headerTitleStyle:{
+          color: '#FFF5F2'
+        }
       })}
     >
-      <Tab.Screen name="Home" options={{ title: 'Home' }} component={HomeScreen} />
+      <Tab.Screen name="Drawer" component={DrawerNavigator} options={{ headerShown: false }} />
       <Tab.Screen name="AddNote" component={AddNoteScreen} options={{ title: 'Add Note' }} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
